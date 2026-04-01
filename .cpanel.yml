@@ -1,5 +1,26 @@
 ---
 deployment:
   tasks:
+    # Define the deployment path (change YOURUSERNAME to your actual cPanel username)
     - export DEPLOYPATH=/home/snatuni1/events.snatunion.com
-    - /bin/cp -R application system index.php assets $DEPLOYPATH
+
+    # Optional: Remove old files first (clean deployment) - recommended for PHP projects
+    - rm -rf $DEPLOYPATH/*
+
+    # Copy all PHP files from repository root to public_html
+    - /bin/cp -R *.php $DEPLOYPATH/
+
+    # Copy the folders you added
+    - /bin/cp -R assets $DEPLOYPATH/
+    - /bin/cp -R config $DEPLOYPATH/
+
+    # If you have other folders later (e.g. includes, css, js, images), add them here like this:
+    # - /bin/cp -R includes $DEPLOYPATH/
+    # - /bin/cp -R css $DEPLOYPATH/
+
+    # Set correct permissions (important for PHP files on cPanel)
+    - find $DEPLOYPATH -type f -name "*.php" -exec chmod 644 {} \;
+    - find $DEPLOYPATH -type d -exec chmod 755 {} \;
+
+    # Optional: Show success message in deployment log
+    - echo "✅ Deployment completed successfully for Events Authenticator"
