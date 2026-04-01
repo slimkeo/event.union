@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/snatuni1/events.snatunion.com
+    - /bin/cp -R application system index.php assets $DEPLOYPATH
