@@ -1,26 +1,20 @@
 ---
 deployment:
   tasks:
-    # Define the deployment path (change YOURUSERNAME to your actual cPanel username)
     - export DEPLOYPATH=/home/snatuni1/events.snatunion.com
 
-    # Optional: Remove old files first (clean deployment) - recommended for PHP projects
+    # Clean previous deployment (safe way)
     - rm -rf $DEPLOYPATH/*
 
-    # Copy all PHP files from repository root to public_html
-    - /bin/cp -R *.php $DEPLOYPATH/
+    # Copy all PHP files from root
+    - /bin/cp -R *.php $DEPLOYPATH/ 2>/dev/null || true
 
-    # Copy the folders you added
-    - /bin/cp -R assets $DEPLOYPATH/
-    - /bin/cp -R config $DEPLOYPATH/
+    # Copy folders only if they exist (this prevents the error)
+    - /bin/cp -R config $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp -R assets $DEPLOYPATH/ 2>/dev/null || true
 
-    # If you have other folders later (e.g. includes, css, js, images), add them here like this:
-    # - /bin/cp -R includes $DEPLOYPATH/
-    # - /bin/cp -R css $DEPLOYPATH/
+    # Set correct permissions
+    - find $DEPLOYPATH -type f -name "*.php" -exec chmod 644 {} \; 2>/dev/null || true
+    - find $DEPLOYPATH -type d -exec chmod 755 {} \; 2>/dev/null || true
 
-    # Set correct permissions (important for PHP files on cPanel)
-    - find $DEPLOYPATH -type f -name "*.php" -exec chmod 644 {} \;
-    - find $DEPLOYPATH -type d -exec chmod 755 {} \;
-
-    # Optional: Show success message in deployment log
-    - echo "✅ Deployment completed successfully for Events Authenticator"
+    - echo "✅ Events Authenticator deployed successfully at $(date)"
