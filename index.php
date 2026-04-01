@@ -1,6 +1,6 @@
 <?php
 // =============================================
-// FILE: dashboard.php
+// FILE: index.php
 // =============================================
 session_start();
 if (!isset($_SESSION['user_id'])) {
